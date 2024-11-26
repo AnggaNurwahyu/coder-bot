@@ -51,8 +51,8 @@ async def get_chatbot_response(user_input, user_id):
         conversation_history[user_id].append({"role": "assistant", "content": response})
 
         # Batasi panjang riwayat (misalnya 10 pesan terakhir)
-        if len(conversation_history[user_id]) > 25:
-            conversation_history[user_id] = conversation_history[user_id][-25:]
+        if len(conversation_history[user_id]) > 30:
+            conversation_history[user_id] = conversation_history[user_id][-30:]
 
         return response
     except Exception as e:
