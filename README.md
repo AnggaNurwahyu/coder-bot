@@ -15,8 +15,12 @@ it's currently still in early development
 - Implementing another AI Agent
 - Change the Bot from Code Helper into multimodal Bot (idk if i can possibly do this lol)
 - Use containers like Docker for example
+- Make the bot can read a code files from Discord chat
 
 # Usage
 ...idk...just...run the code? i guess?
 
 actually I'll add this later
+
+### BRUH
+This things sometimes broke I'll fix it later
