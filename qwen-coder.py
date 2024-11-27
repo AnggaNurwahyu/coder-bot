@@ -64,7 +64,7 @@ def split_message(response, max_length=2000):
     """
     Memecah pesan menjadi bagian lebih kecil dengan mempertahankan struktur
     blok kode (```) dan header (###), serta memisahkan bagian yang diawali dengan **bold**.
-    Blok kode panjang akan diakhiri dan dilanjutkan pada pesan berikutnya.
+    Baris kosong akan ditambahkan sebelum awal blok kode baru.
     """
     lines = response.splitlines()  # Pisahkan menjadi baris
     parts = []
@@ -75,21 +75,18 @@ def split_message(response, max_length=2000):
     for line in lines:
         # Periksa apakah baris ini memulai atau mengakhiri blok kode
         if line.strip().startswith("```"):
-            if inside_code_block:
-                # Akhiri blok kode jika terlalu panjang
-                if current_length + len(line) + 1 > max_length:
-                    current_part.append("```")  # Akhiri blok kode di pesan ini
-                    parts.append("\n".join(current_part))
-                    current_part = ["```"]  # Mulai blok kode baru di pesan berikutnya
-                    current_length = len("```") + 1
-
-            # Ubah status blok kode
-            inside_code_block = not inside_code_block
+            if not inside_code_block:
+                # Tambahkan baris kosong sebelum memulai blok kode baru
+                if current_part:
+                    current_part.append("")  # Baris kosong sebelum ``` jika ada isi sebelumnya
+                    current_length += 1
+                
             current_part.append(line)
             current_length += len(line) + 1
+            inside_code_block = not inside_code_block  # Ubah status blok kode
             continue
 
-        # Periksa apakah baris ini diawali dengan ### (header tingkat 3)
+        # Periksa apakah baris ini adalah header atau **bold**
         if line.strip().startswith("###") or line.strip().startswith("**"):
             if current_part:
                 parts.append("\n".join(current_part))
@@ -106,14 +103,15 @@ def split_message(response, max_length=2000):
         else:
             # Simpan bagian saat ini
             if inside_code_block:
-                current_part.append("```")  # Akhiri blok kode di pesan ini
-                parts.append("\n".join(current_part))
-                current_part = ["```", line]  # Mulai blok kode baru di pesan berikutnya
-                current_length = len("```") + len(line) + 2
-            else:
-                parts.append("\n".join(current_part))
-                current_part = [line]
-                current_length = len(line) + 1
+                current_part.append("```")  # Akhiri blok kode
+            parts.append("\n".join(current_part))
+            current_part = []
+            current_length = 0
+            if inside_code_block:
+                current_part.append("```")  # Mulai blok kode baru
+                current_length += len("```") + 1
+            current_part.append(line)
+            current_length += len(line) + 1
 
     # Tambahkan bagian terakhir
     if current_part:
@@ -122,6 +120,7 @@ def split_message(response, max_length=2000):
         parts.append("\n".join(current_part))
 
     return [part for part in parts if part.strip()]
+
 
 # Event handler for messaging
 @client.event
