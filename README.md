@@ -14,3 +14,9 @@ it's currently still in early development
 - Fix the code Structure
 - Implementing another AI Agent
 - Change the Bot from Code Helper into multimodal Bot (idk if i can possibly do this lol)
+- Use containers like Docker for example
+
+# Usage
+...idk...just...run the code? i guess?
+
+actually I'll add this later
