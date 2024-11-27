@@ -6,13 +6,13 @@ import logging
 from dotenv import load_dotenv
 import os
 
-# Load variabel lingkungan dari .env
+# Load variables from .env
 load_dotenv()
 
-# Konfigurasi logging
+# Logging things
 logging.basicConfig(level=logging.INFO)
 
-# Ambil API Key dan token dari .env
+# Load API and Tokens from .env
 api_key = os.getenv("API_KEY")
 bot_token = os.getenv("DISCORD_TOKEN")
 
@@ -59,7 +59,7 @@ async def get_chatbot_response(user_input, user_id):
         logging.error(f"Error saat memanggil API: {e}")
         return "Maaf, terjadi kesalahan saat memproses permintaan Anda."
 
-# Fungsi untuk memisahkan pesan menjadi bagian lebih kecil
+# Message split function, Discord has limit of 2000 characters  
 def split_message(response, max_length=2000):
     """
     Memecah pesan menjadi bagian lebih kecil dengan mempertahankan struktur
@@ -123,7 +123,7 @@ def split_message(response, max_length=2000):
 
     return [part for part in parts if part.strip()]
 
-# Event handler untuk menangani pesan
+# Event handler for messaging
 @client.event
 async def on_message(message):
     if message.author == client.user:
@@ -145,7 +145,7 @@ async def on_message(message):
             if part.strip():  # Pastikan bagian tidak kosong
                 await message.reply(part, mention_author=False)
 
-# Menjalankan bot
+# This things Run the bot
 try:
     client.run(bot_token)
 except Exception as e:
