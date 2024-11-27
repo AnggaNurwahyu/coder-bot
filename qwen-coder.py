@@ -42,7 +42,7 @@ async def get_chatbot_response(user_input, user_id):
     try:
         completion = await asyncio.to_thread(
             hf_client.chat.completions.create,
-            model="Qwen/Qwen2.5-Coder-32B-Instruct",  # Ganti model sesuai kebutuhan
+            model="Qwen/Qwen2.5-Coder-32B-Instruct",  # Model AI yang akan dipakai
             messages=conversation_history[user_id],
             max_tokens=1500
         )
@@ -50,7 +50,7 @@ async def get_chatbot_response(user_input, user_id):
         response = completion.choices[0].message["content"]
         conversation_history[user_id].append({"role": "assistant", "content": response})
 
-        # Batasi panjang riwayat (misalnya 10 pesan terakhir)
+        # Batasi panjang riwayat yang akan disimpan di memori sebayak > n
         if len(conversation_history[user_id]) > 30:
             conversation_history[user_id] = conversation_history[user_id][-30:]
 
@@ -59,7 +59,7 @@ async def get_chatbot_response(user_input, user_id):
         logging.error(f"Error saat memanggil API: {e}")
         return "Maaf, terjadi kesalahan saat memproses permintaan Anda."
 
-# Fungsi untuk memisahkan pesan menjadi bagian lebih kecil dengan header "###"
+# Fungsi untuk memisahkan pesan menjadi bagian lebih kecil
 def split_message(response, max_length=2000):
     """
     Memecah pesan menjadi bagian lebih kecil dengan mempertahankan struktur
