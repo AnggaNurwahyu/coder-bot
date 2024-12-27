@@ -18,9 +18,11 @@ it's currently still in early development
 - Make the bot can read a code files from Discord chat
 
 # Usage
-...idk...just...run the code? i guess?
-
-actually I'll add this later
+- First of all, you need 2 things. Discord APP tokens and your huggingface access Tokens
+- put the Tokens in .env
+- Run the code and bot will connect to the discord API
+- Invite the bot into your Discord Server or something
+- Done
 
 ### BRUH
 This things sometimes broke I'll fix it later
